@@ -17,14 +17,15 @@ public class UutisController {
 
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("items", uutisRepository.findAll());
+        model.addAttribute("uutiset", uutisRepository.findAll());
         return "index";
     }
 
     @PostMapping("/")
-    public String create(@RequestParam String name) {
-        Uutinen i = new Uutinen(name);
-        uutisRepository.save(i);
+    public String create(@RequestParam String otsikko) {
+        Uutinen uutinen = new Uutinen();
+        uutinen.setOtsikko(otsikko);
+        uutisRepository.save(uutinen);
         return "redirect:/";
     }
 }

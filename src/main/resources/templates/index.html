@@ -6,20 +6,20 @@
     </head>
     <body>
 
-        <h2>Items</h2>
+        <h2>Uutisista, hyvää iltaa</h2>
 
         <div>
             <ul>
-                <li th:each="item : ${items}" th:text="${item.name}"></li>
+                <li th:each="uutinen : ${uutiset}" th:text="${uutinen.otsikko}"></li>
             </ul>
         </div>
 
 
-        <h2>Add new</h2>
+        <h3>Lisää uutiselle otsikko, hyvää iltaa</h3>
 
         <form method="POST" th:action="@{/}">
-            <input type="text" name="name"/>
-            <input type="submit" value="Add"/>
+            <input type="text" name="otsikko"/>
+            <input type="submit" value="Lisää"/>
         </form>
 
     </body>
