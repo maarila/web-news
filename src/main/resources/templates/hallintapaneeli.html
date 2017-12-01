@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+    </head>
+    <body>
+
+        <h2>Luo uusi uutinen</h2>
+
+        <form method="POST" th:action="@{/}" name="uutinen" enctype="multipart/form-data">
+
+            Otsikko:<br/>
+            <input type="text" name="otsikko" required /><br/><br/>
+
+            Ingressi:<br/>
+                <input type="text" name="ingressi"/>
+            <br/><br/>
+            
+            Kuva:<br/>
+                <input type="file" name="kuva"/><br/><br/>
+            
+            Leipäteksti:<br/>
+                <textarea rows="8" cols="80" name="leipateksti"></textarea><br/><br/>
+            
+            Julkaisuaika:<br/>
+                <input type="datetime-local" name="julkaisuaika"/><br/><br/>
+            
+            Kirjoittaja(t):<br/>
+                <input type="text" name="kirjoittajat"/><br/><br/>
+            
+            Kategoria(t):<br/>
+                <input type="text" name="kategoriat"/><br/><br/>
+            <input type="submit" value="Tallenna uutinen"/>
+
+        </form>
+
+    </body>
+
+</html>

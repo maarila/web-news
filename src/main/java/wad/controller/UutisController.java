@@ -1,6 +1,8 @@
 package wad.controller;
 
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +18,19 @@ public class UutisController {
     private UutisRepository uutisRepository;
 
     @GetMapping("/")
-    public String list(Model model) {
+    public String etusivu(Model model) {
+        // etusivu listaa oletuksena viisi uusinta uutista
         model.addAttribute("uutiset", uutisRepository.findAll());
         return "index";
     }
 
-    @PostMapping("/")
-    public String create(@RequestParam String otsikko) {
+    @GetMapping("/hallinta")
+    public String hallintapaneeli() {
+        return "hallintapaneeli";
+    }
+
+    @PostMapping("/hallinta")
+        public String luoUutinen(@RequestParam String otsikko, @DateTimeFormat(pattern = "yyyy-MM-dd HH:MM") LocalDateTime aika) {
         Uutinen uutinen = new Uutinen();
         uutinen.setOtsikko(otsikko);
         uutisRepository.save(uutinen);
