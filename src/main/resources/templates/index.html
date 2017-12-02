@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
-        <title>Title</title>
+        <title>Etusivu</title>
     </head>
     <body>
 
@@ -11,20 +11,21 @@
         </header>
 
         <h2>Uutisista, hyvää iltaa</h2>
+        
+        Tämä on uutisten etusivu, tulossa viisi uusinta siten, että jokaisesta
+        näkyy otsikko, ingressi ja kuva.<br/>Uutista klikkaamalla pääsee lukemaan
+        koko uutisen.
 
         <div>
             <ul>
-                <li th:each="uutinen : ${uutiset}" th:text="${uutinen.otsikko}"></li>
-            </ul>
+                <li th:each="uutinen : ${uutiset}">
+                    <span th:text="${uutinen.otsikko}"></span><br />
+                    <span th:text="${uutinen.ingressi}"></span><br />
+                    <span th:text="${uutinen.leipateksti}"></span><br />
+                    <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br />
+                    <img th:src="@{/uutinen/{id}(id=${2})}"/>
+                </li></ul>
         </div>
-
-
-        <h3>Lisää uutiselle otsikko, hyvää iltaa</h3>
-
-        <form method="POST" th:action="@{/}">
-            <input type="text" name="otsikko"/>
-            <input type="submit" value="Lisää"/>
-        </form>
 
     </body>
 

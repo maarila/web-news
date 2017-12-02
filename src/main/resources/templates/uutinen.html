@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
-        <title>Title</title>
+        <!--<title th:text="${uutinen.otsikko}">Uutissivu</title>-->
+        <title>Varatitle, kunnes kaikki toimii!!!</title>
     </head>
     <body>
 
@@ -12,20 +13,23 @@
 
 
         <h2>Uutisista, hyvää iltaa</h2>
+        Tämä on yksittäisen uutisen sivu.<br />
+        Mukaan listat luetuimmista ja uusimmista.<br />
+        Ylälaidassa kategoriat!
+        
+<!--        <h4 th:text="${uutinen.otsikko}">Otsikko</h4>
+        
+        <img th:src="${uutinen.kuva}" />
+        
+        <h6 th:text="${uutinen.ingressi}">Ingressi</h6>
+        <div th:text="${uutinen.leipateksti}">Leipateksti</div>-->
 
-        <div>
+<!--        <div>
             <ul>
                 <li th:each="uutinen : ${uutiset}" th:text="${uutinen.otsikko}"></li>
             </ul>
-        </div>
+        </div>-->
 
-
-        <h3>Lisää uutiselle otsikko, hyvää iltaa</h3>
-
-        <form method="POST" th:action="@{/}">
-            <input type="text" name="otsikko"/>
-            <input type="submit" value="Lisää"/>
-        </form>
 
     </body>
 

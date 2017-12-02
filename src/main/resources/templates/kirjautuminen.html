@@ -2,25 +2,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
-        <title>Title</title>
+        <title>Kirjautuminen</title>
     </head>
     <body>
 
-        <h2>Uutisista, hyvää iltaa</h2>
+        <h2>Kirjaudu uutisten hallintaan</h2>
+        (toimiva kombo - käyttäjätunnus: <i>admin</i>, salasana: <i>adminlol</i>)<br /><br />
 
-        <div>
-            <ul>
-                <li th:each="uutinen : ${uutiset}" th:text="${uutinen.otsikko}"></li>
-            </ul>
-        </div>
-
-
-        <h3>Lisää uutiselle otsikko, hyvää iltaa</h3>
-
-        <form method="POST" th:action="@{/}">
-            <input type="text" name="otsikko"/>
-            <input type="submit" value="Lisää"/>
+        <form method="POST" th:action="@{/kirjautuminen}">
+            Käyttäjätunnus:<br />
+            <input type="text" name="kayttajatunnus"/><br />
+            Salasana:<br />
+            <input type="password" name="salasana"/><br />
+            <input type="submit" value="Kirjaudu"/>
         </form>
+
+        <br /><a href="../">Palaa etusivulle kirjautumatta</a>
 
     </body>
 
