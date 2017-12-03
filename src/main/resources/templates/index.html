@@ -5,26 +5,45 @@
         <title>Etusivu</title>
     </head>
     <body>
+        <style>
+            h1 {
+                margin:0;
+            }
+            a:link {
+                color: black;
+                text-decoration: none;
+            }
+            a:visited {
+                color: black;
+                text-decoration: none;
+            }
+            a:hover {
+                color: black;
+                text-decoration: none;
+            }
+            a:active {
+                color: black;
+                text-decoration: none;
+            }
+            table {
+                width: 750px;                 
+            }
+            th {
+                text-align: left;
+            }
+        </style>
 
         <header th:replace="fragments/header :: header">
             <p>linkki-header</p>
         </header>
 
-        <h2>Uutisista, hyvää iltaa</h2>
-        
-        Tämä on uutisten etusivu, tulossa viisi uusinta siten, että jokaisesta
-        näkyy otsikko, ingressi ja kuva.<br/>Uutista klikkaamalla pääsee lukemaan
-        koko uutisen.
+        <hr></hr>
 
-        <div>
-            <ul>
-                <li th:each="uutinen : ${uutiset}">
-                    <span th:text="${uutinen.otsikko}"></span><br />
-                    <span th:text="${uutinen.ingressi}"></span><br />
-                    <span th:text="${uutinen.leipateksti}"></span><br />
-                    <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br />
-                    <img th:src="@{/uutinen/{id}(id=${uutinen.kuva.id})}"/>
-                </li></ul>
+        <div th:each="uutinen : ${uutiset}">
+            <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">
+                <h1 style="font-family:verdana; font-size:200%;" th:text="${uutinen.otsikko}"></h1>
+                <div style="font-size:130%;" th:text="${uutinen.ingressi}"></div><br />
+                <img th:src="@{/uutinen/{id}(id=${uutinen.kuva.id})}" alt="Uutiskuva" width="500" height="300"/></a><hr></hr>
         </div>
 
     </body>

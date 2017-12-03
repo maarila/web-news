@@ -2,34 +2,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
-        <!--<title th:text="${uutinen.otsikko}">Uutissivu</title>-->
-        <title>Varatitle, kunnes kaikki toimii!!!</title>
+        <title th:text="${uutinen.otsikko}">Uutissivu</title>
     </head>
     <body>
+        <style>
+            h1 {
+                margin:0;
+            }
+            a:link {
+                color: black;
+                text-decoration: none;
+            }
+            a:visited {
+                color: black;
+                text-decoration: none;
+            }
+            a:hover {
+                color: black;
+                text-decoration: none;
+            }
+            a:active {
+                color: black;
+                text-decoration: none;
+            }
+            table {
+                width: 750px;                 
+            }
+            th {
+                text-align: left;
+            }
+        </style>
 
         <header th:replace="fragments/header :: header">
             <p>linkki-header</p>
         </header>
+        <hr></hr>
 
-
-        <h2>Uutisista, hyvää iltaa</h2>
-        Tämä on yksittäisen uutisen sivu.<br />
-        Mukaan listat luetuimmista ja uusimmista.<br />
-        Ylälaidassa kategoriat!
-        
-<!--        <h4 th:text="${uutinen.otsikko}">Otsikko</h4>
-        
-        <img th:src="${uutinen.kuva}" />
-        
-        <h6 th:text="${uutinen.ingressi}">Ingressi</h6>
-        <div th:text="${uutinen.leipateksti}">Leipateksti</div>-->
-
-<!--        <div>
-            <ul>
-                <li th:each="uutinen : ${uutiset}" th:text="${uutinen.otsikko}"></li>
-            </ul>
-        </div>-->
-
+        <h1 th:text="${uutinen.otsikko}"></h1>
+        <h4 th:text="${uutinen.ingressi}"></h4>
+        <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
+        <img th:src="@{/uutinen/{id}(id=${uutinen.kuva.id})}" alt="Uutiskuva" width="500" height="300"/><br />
+        <span th:text="${uutinen.leipateksti}"></span><br />
 
     </body>
 

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +31,8 @@ public class UutisController {
 
     @GetMapping("/")
     public String etusivu(Model model) {
-        // etusivu listaa oletuksena viisi uusinta uutista
-        model.addAttribute("uutiset", uutisRepository.findAll());
+        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "julkaisuaika");
+        model.addAttribute("uutiset", uutisRepository.findAll(pageable));
         return "index";
     }
 
@@ -37,13 +40,7 @@ public class UutisController {
     public String uutislistaus() {
         return "uutislista";
     }
-
-    @GetMapping("/uutinen")
-    public String uutisplaceholder() {
-        // tämä on placeholder-controller!
-        return "uutinen";
-    }
-
+    
     @GetMapping("/uutinen/{id}")
     public String uutinen(@PathVariable Long id, Model model) {
         Uutinen uutinen = this.uutisRepository.getOne(id);
