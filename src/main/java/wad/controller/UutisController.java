@@ -36,11 +36,18 @@ public class UutisController {
         return "index";
     }
 
-    @GetMapping("/uutislista")
-    public String uutislistaus() {
+    @GetMapping("/uusimmat")
+    public String uusinLista(Model model) {
+        Sort sort = new Sort(Sort.Direction.DESC, "julkaisuaika");
+        model.addAttribute("uutiset", uutisRepository.findAll(sort));
         return "uutislista";
     }
-    
+
+    @GetMapping("/luetuimmat")
+    public String luetuimmatLista(Model model) {
+        return "uutislista";
+    }
+
     @GetMapping("/uutinen/{id}")
     public String uutinen(@PathVariable Long id, Model model) {
         Uutinen uutinen = this.uutisRepository.getOne(id);

@@ -5,20 +5,48 @@
         <title>Uutisia</title>
     </head>
     <body>
+        <style>
+            h3 {
+                margin:0;
+            }
+            a:link {
+                color: black;
+                text-decoration: none;
+            }
+            a:visited {
+                color: black;
+                text-decoration: none;
+            }
+            a:hover {
+                color: black;
+                text-decoration: none;
+            }
+            a:active {
+                color: black;
+                text-decoration: none;
+            }
+            table {
+                width: 750px;                 
+            }
+            th {
+                text-align: left;
+            }
+        </style>
 
         <header th:replace="fragments/header :: header">
             <p>linkki-header</p>
         </header>
+        <hr />
 
 
-        <h2>Uutislistaus</h2>
-        
-        Lista joko julkaisuajan, edellisen viikon lukumäärien tai kategorian perusteella.
+        <h1>Uusimmat uutiset</h1>
 
-        <div>
-            <ul>
-                <li th:each="uutinen : ${uutiset}" th:text="${uutinen.otsikko}"></li>
-            </ul>
+        <div th:each="uutinen : ${uutiset}">
+            <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">
+                <h3 style="font-size: 150%;" th:text="${uutinen.otsikko}"></h3>
+                Julkaistu:
+                <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
+            </a>
         </div>
 
     </body>
