@@ -39,7 +39,7 @@
         <hr />
 
 
-        <h1>Uusimmat uutiset</h1>
+        <h1 th:text="${listaus}">Uutislistaus</h1>
 
         <div th:each="uutinen : ${uutiset}">
             <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">

@@ -37,14 +37,18 @@ public class UutisController {
     }
 
     @GetMapping("/uusimmat")
-    public String uusinLista(Model model) {
+    public String uusimmatLista(Model model) {
         Sort sort = new Sort(Sort.Direction.DESC, "julkaisuaika");
         model.addAttribute("uutiset", uutisRepository.findAll(sort));
+        model.addAttribute("listaus", "Uusimmat uutiset");
         return "uutislista";
     }
 
     @GetMapping("/luetuimmat")
     public String luetuimmatLista(Model model) {
+        Sort sort = new Sort(Sort.Direction.DESC, "luettu");
+        model.addAttribute("uutiset", uutisRepository.findAll(sort));
+        model.addAttribute("listaus", "Luetuimmat uutiset");
         return "uutislista";
     }
 
