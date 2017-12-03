@@ -87,16 +87,17 @@ public class UutisController {
     }
 
     @PostMapping("/hallinta/kuva")
-    public String lisaaKuva(@RequestParam Integer uutinen, @RequestParam("kuva") MultipartFile tiedosto) throws IOException {
+    public String lisaaKuva(@RequestParam Long uutisId, @RequestParam("kuva") MultipartFile tiedosto) throws IOException {
         Kuva kuva = new Kuva();
-        // haetaan uutisen id:n perusteella uutinen - tallennetaan se kuvan attribuutiksi
-        // haetaan sen jälkeen kuvan id ja talletetaan kuva uutisen attribuutiksi
         kuva.setKuva(tiedosto.getBytes());
-
         kuvaRepository.save(kuva);
 //        if (kuva.getContentType().contains("image/")) {
 //            uutinen.setKuva(kuva.getBytes());
 //        }        
+        Uutinen uutinen = uutisRepository.getOne(uutisId);
+        uutinen.setKuva(kuva);
+        uutisRepository.save(uutinen);
+
         return "redirect:/hallinta";
     }
 

@@ -23,7 +23,7 @@
                     <span th:text="${uutinen.ingressi}"></span><br />
                     <span th:text="${uutinen.leipateksti}"></span><br />
                     <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br />
-                    <img th:src="@{/uutinen/{id}(id=${2})}"/>
+                    <img th:src="@{/uutinen/{id}(id=${uutinen.kuva.id})}"/>
                 </li></ul>
         </div>
 

@@ -33,7 +33,7 @@
 
         <form method="POST" th:action="@{/hallinta/kuva}" enctype="multipart/form-data">
             Valitse haluttu uutinen listalta:<br />
-            <select name="uutinen">
+            <select name="uutisId">
                 <option th:each="uutinen : ${uutiset}" th:value="${uutinen.id}" 
                         th:text="${uutinen.otsikko}">Uutinen</option>
             </select><br /><br />
