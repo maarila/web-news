@@ -70,6 +70,8 @@ public class UutisController {
         uutinen.setLuettu(uutinen.getLuettu() + 1);
         this.uutisRepository.save(uutinen);
         model.addAttribute("uutinen", uutinen);
+        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "julkaisuaika");
+        model.addAttribute("uusimmat", uutisRepository.findAll(pageable));
         return "uutinen";
     }
 
@@ -87,7 +89,9 @@ public class UutisController {
     @PostMapping("/hallinta")
     public String luoUutinen(@RequestParam String otsikko, @RequestParam String ingressi,
             @RequestParam String leipateksti, @RequestParam String julkaisuaika,
-            @RequestParam String kirjoittajat, @RequestParam String kategoriat) throws IOException {
+            @RequestParam String kirjoittajat, @RequestParam String kategoriat,
+            @RequestParam("kuva") MultipartFile tiedosto) throws IOException {
+        
         Uutinen uutinen = new Uutinen();
         uutinen.setOtsikko(otsikko);
         uutinen.setIngressi(ingressi);
@@ -113,28 +117,17 @@ public class UutisController {
         }
         uutinen.setKirjoittajat(uutisenKirjoittajat);
 
+        Kuva kuva = new Kuva();
+        kuva.setKuva(tiedosto.getBytes());
+        kuvaRepository.save(kuva);
+        uutinen.setKuva(kuva);
 //        uutinen.getKategoriat().add(kategoria);
 //        Kategoria kategoria = new Kategoria();
 //        kategoria.setName(kategoriat);
         uutisRepository.save(uutinen);
         return "redirect:/hallinta";
     }
-
-    @PostMapping("/hallinta/kuva")
-    public String lisaaKuva(@RequestParam Long uutisId, @RequestParam("kuva") MultipartFile tiedosto) throws IOException {
-        Kuva kuva = new Kuva();
-        kuva.setKuva(tiedosto.getBytes());
-        kuvaRepository.save(kuva);
-//        if (kuva.getContentType().contains("image/")) {
-//            uutinen.setKuva(kuva.getBytes());
-//        }        
-        Uutinen uutinen = uutisRepository.getOne(uutisId);
-        uutinen.setKuva(kuva);
-        uutisRepository.save(uutinen);
-
-        return "redirect:/hallinta";
-    }
-
+    
     @GetMapping(path = "/uutinen/{id}", produces = "image/jpg")
     @ResponseBody
     public byte[] get(@PathVariable Long id) {

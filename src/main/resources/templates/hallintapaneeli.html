@@ -8,7 +8,7 @@
 
         <h2>Luo uusi uutinen</h2>
 
-        <form method="POST" th:action="@{/hallinta}" name="uutinen">
+        <form method="POST" th:action="@{/hallinta}" name="uutinen" enctype="multipart/form-data">
             Otsikko:<br/>
             <input type="text" name="otsikko" size="60" required /><br/><br/>
 
@@ -26,23 +26,14 @@
 
             Kategoria tai kategoriat pilkuilla eroteltuina:<br/>
             <input type="text" name="kategoriat" size="60" required /><br/><br/>
+
+            Valitse haluttu kuva (vain png-muodossa!):<br/>
+            <input type="file" name="kuva"/><br/><br/><br /><br />
+            
             <input type="submit" value="Tallenna uutinen" style="width: 180px; font-size: 80%; background-color: lightcyan"/>
         </form><br /><br />
 
-
-        <form method="POST" th:action="@{/hallinta/kuva}" enctype="multipart/form-data">
-            Valitse haluttu uutinen listalta:<br />
-            <select name="uutisId">
-                <option th:each="uutinen : ${uutiset}" th:value="${uutinen.id}" 
-                        th:text="${uutinen.otsikko}">Uutinen</option>
-            </select><br /><br />
-
-            Valitse haluttu kuva:<br/>
-            <input type="file" name="kuva"/><br/><br/>
-            <input type="submit" value="Lisää kuva uutiseen"/>
-        </form>
-
-        <br /><br /><a href="../">Palaa etusivulle (keskeneräistä uutista ei tallenneta!)</a>
+        <br /><br /><a href="../">Palaa etusivulle</a>
 
     </body>
 </html>

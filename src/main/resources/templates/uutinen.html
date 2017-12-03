@@ -6,7 +6,7 @@
     </head>
     <body>
         <style>
-            h1, h4 {
+            h1, h2, h3, h4 {
                 margin: 0;
                 padding-bottom: 6px;
                 font-family: verdana;
@@ -36,6 +36,9 @@
             th {
                 text-align: left;
             }
+            div {
+                font-size: 120%;
+            }
         </style>
 
         <header th:replace="fragments/header :: header">
@@ -48,12 +51,20 @@
         <span>Julkaistu:</span>
         <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
         <img th:src="@{/uutinen/{id}(id=${uutinen.kuva.id})}" alt="Uutiskuva" width="500" height="300"/><br /><br />
-        <span th:text="${uutinen.leipateksti}"></span><br />
+        <div th:text="${uutinen.leipateksti}"></div><br /><br />
         Kirjoittajat:
         <div th:each="kirjoittaja : ${uutinen.kirjoittajat}">
             <span th:text="${kirjoittaja.nimi}"></span>
-        </div>
+        </div><br /><br /><hr />
 
+        <h2>Juuri nyt:</h2><br />
+        <div th:each="uutinen : ${uusimmat}">
+            <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">
+                <h4 th:text="${uutinen.otsikko}"></h4>
+                Julkaistu:
+                <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
+            </a>
+        </div>        
     </body>
 
 </html>
