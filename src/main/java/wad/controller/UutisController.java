@@ -3,6 +3,7 @@ package wad.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,14 +77,32 @@ public class UutisController {
     }
 
     @GetMapping("/hallinta")
-    public String hallintapaneeli(Model model) {
-        model.addAttribute("uutiset", uutisRepository.findAll());
-        return "hallintapaneeli";
+    public String hallintapaneeli(Model model, HttpSession session) {
+        if (!(session.getAttribute("admin") == null)) {
+            if (session.getAttribute("admin").equals("onSeAdmin")) {
+                return "hallintapaneeli";
+            }
+        }
+        return "redirect:/";
     }
 
     @GetMapping("/kirjautuminen")
-    public String kirjautuminen() {
+    public String kirjautuminen(HttpSession session) {
+        if (!(session.getAttribute("admin") == null)) {
+            if (session.getAttribute("admin").equals("onSeAdmin")) {
+                return "hallintapaneeli";
+            }
+        }
         return "kirjautuminen";
+    }
+
+    @PostMapping("/kirjautuminen")
+    public String kirjaudu(@RequestParam String kayttajatunnus, @RequestParam String salasana, HttpSession session) {
+        if (kayttajatunnus.equals("admin") && salasana.equals("adminlol")) {
+            session.setAttribute("admin", "onSeAdmin");
+            return "hallintapaneeli";
+        }
+        return "redirect:/kirjautuminen";
     }
 
     @PostMapping("/hallinta")
@@ -91,7 +110,7 @@ public class UutisController {
             @RequestParam String leipateksti, @RequestParam String julkaisuaika,
             @RequestParam String kirjoittajat, @RequestParam String kategoriat,
             @RequestParam("kuva") MultipartFile tiedosto) throws IOException {
-        
+
         Uutinen uutinen = new Uutinen();
         uutinen.setOtsikko(otsikko);
         uutinen.setIngressi(ingressi);
@@ -127,7 +146,7 @@ public class UutisController {
         uutisRepository.save(uutinen);
         return "redirect:/hallinta";
     }
-    
+
     @GetMapping(path = "/uutinen/{id}", produces = "image/jpg")
     @ResponseBody
     public byte[] get(@PathVariable Long id) {
