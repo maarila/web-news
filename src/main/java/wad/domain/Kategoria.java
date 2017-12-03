@@ -18,5 +18,5 @@ public class Kategoria extends AbstractPersistable<Long> {
     @ManyToMany(mappedBy = "kategoriat")
     private List<Uutinen> uutiset;
 
-    private String name;
+    private String nimi;
 }

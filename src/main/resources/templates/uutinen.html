@@ -64,7 +64,16 @@
                 Julkaistu:
                 <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
             </a>
-        </div>        
+        </div><hr />
+        
+        <h2>Luetuimmat:</h2><br />
+        <div th:each="uutinen : ${luetuimmat}">
+            <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">
+                <h4 th:text="${uutinen.otsikko}"></h4>
+                Julkaistu:
+                <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
+            </a>
+        </div>
     </body>
 
 </html>

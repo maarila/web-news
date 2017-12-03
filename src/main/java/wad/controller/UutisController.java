@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import wad.domain.Kategoria;
 import wad.domain.Kirjoittaja;
 import wad.domain.Kuva;
 import wad.domain.Uutinen;
@@ -73,6 +74,8 @@ public class UutisController {
         model.addAttribute("uutinen", uutinen);
         Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "julkaisuaika");
         model.addAttribute("uusimmat", uutisRepository.findAll(pageable));
+        pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "luettu");
+        model.addAttribute("luetuimmat", uutisRepository.findAll(pageable));
         return "uutinen";
     }
 
@@ -117,9 +120,27 @@ public class UutisController {
         uutinen.setLeipateksti(leipateksti);
         uutinen.setJulkaisuaika(muokkaus.luoOikeanMuotoinenAika(julkaisuaika));
         uutinen.setLuettu(0);
+        uutinen.setKirjoittajat(lisaaUutinenKirjoittajille(uutinen, kirjoittajat));
+        uutinen.setKategoriat(lisaaUutinenKategorioihin(uutinen, kategoriat));
+        
+        Kuva kuva = muokkaus.luoKuva(tiedosto);
+        kuvaRepository.save(kuva);
+        
+        uutinen.setKuva(kuva);
+        
+        uutisRepository.save(uutinen);
+        return "redirect:/hallinta";
+    }
 
-        String[] kirjoittajaTaulukko = muokkaus.erotaToisistaan(kirjoittajat);
+    @GetMapping(path = "/uutinen/{id}", produces = "image/jpg")
+    @ResponseBody
+    public byte[] get(@PathVariable Long id) {
+        return this.kuvaRepository.findById(id).get().getKuva();
+    }
+
+    public List<Kirjoittaja> lisaaUutinenKirjoittajille(Uutinen uutinen, String kirjoittajat) {
         List<Kirjoittaja> uutisenKirjoittajat = new ArrayList<>();
+        String[] kirjoittajaTaulukko = muokkaus.erotaToisistaan(kirjoittajat);
 
         for (int i = 0; i < kirjoittajaTaulukko.length; i++) {
             Kirjoittaja kirjoittaja = kirjoittajaRepository.findByNimi(kirjoittajaTaulukko[i]);
@@ -134,22 +155,26 @@ public class UutisController {
             kirjoittaja.getUutiset().add(uutinen);
             kirjoittajaRepository.save(kirjoittaja);
         }
-        uutinen.setKirjoittajat(uutisenKirjoittajat);
-
-        Kuva kuva = new Kuva();
-        kuva.setKuva(tiedosto.getBytes());
-        kuvaRepository.save(kuva);
-        uutinen.setKuva(kuva);
-//        uutinen.getKategoriat().add(kategoria);
-//        Kategoria kategoria = new Kategoria();
-//        kategoria.setName(kategoriat);
-        uutisRepository.save(uutinen);
-        return "redirect:/hallinta";
+        return uutisenKirjoittajat;
     }
 
-    @GetMapping(path = "/uutinen/{id}", produces = "image/jpg")
-    @ResponseBody
-    public byte[] get(@PathVariable Long id) {
-        return this.kuvaRepository.findById(id).get().getKuva();
+    private List<Kategoria> lisaaUutinenKategorioihin(Uutinen uutinen, String kategoriat) {
+        List<Kategoria> uutisenKategoriat = new ArrayList<>();
+        String[] kategoriaTaulukko = muokkaus.erotaToisistaan(kategoriat);
+
+        for (int i = 0; i < kategoriaTaulukko.length; i++) {
+            Kategoria kategoria = kategoriaRepository.findByNimi(kategoriaTaulukko[i]);
+            if (kategoria == null) {
+                Kategoria uusi = new Kategoria();
+                uusi.setNimi(kategoriaTaulukko[i]);
+                uusi.setUutiset(new ArrayList<>());
+                kategoriaRepository.save(uusi);
+                kategoria = kategoriaRepository.findByNimi(kategoriaTaulukko[i]);
+            }
+            uutisenKategoriat.add(kategoria);
+            kategoria.getUutiset().add(uutinen);
+            kategoriaRepository.save(kategoria);
+        }
+        return uutisenKategoriat;
     }
 }

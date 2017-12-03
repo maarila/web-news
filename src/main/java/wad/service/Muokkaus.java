@@ -1,19 +1,15 @@
-
 package wad.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import org.springframework.beans.factory.annotation.Autowired;
-import wad.repository.KirjoittajaRepository;
+import org.springframework.web.multipart.MultipartFile;
+import wad.domain.Kuva;
 
 public class Muokkaus {
-    
-    @Autowired
-    KirjoittajaRepository kirjoittajaRepository;
-    
+
     public String[] erotaToisistaan(String erotettavaMerkkijono) {
         String[] palaset = erotettavaMerkkijono.trim().split(", ");
-        
         return palaset;
     }
 
@@ -23,4 +19,9 @@ public class Muokkaus {
         return aika;
     }
 
+    public Kuva luoKuva(MultipartFile tiedosto) throws IOException {
+        Kuva kuva = new Kuva();
+        kuva.setKuva(tiedosto.getBytes());
+        return kuva;
+    }
 }
