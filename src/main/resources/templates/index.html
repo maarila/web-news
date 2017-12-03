@@ -7,7 +7,9 @@
     <body>
         <style>
             h1 {
-                margin:0;
+                margin: 0;
+                font-family: verdana;
+                font-size: 200%;
             }
             a:link {
                 color: black;
@@ -41,7 +43,7 @@
 
         <div th:each="uutinen : ${uutiset}">
             <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">
-                <h1 style="font-family:verdana; font-size:200%;" th:text="${uutinen.otsikko}"></h1>
+                <h1 th:text="${uutinen.otsikko}"></h1>
                 <div style="font-size:130%;" th:text="${uutinen.ingressi}"></div><br />
                 <img th:src="@{/uutinen/{id}(id=${uutinen.kuva.id})}" alt="Uutiskuva" width="500" height="300"/></a><hr />
         </div>

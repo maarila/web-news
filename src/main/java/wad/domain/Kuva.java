@@ -1,6 +1,8 @@
 package wad.domain;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -18,5 +20,6 @@ public class Kuva extends AbstractPersistable<Long> {
     private Uutinen uutinen;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private byte[] kuva;
 }

@@ -10,24 +10,23 @@
 
         <form method="POST" th:action="@{/hallinta}" name="uutinen">
             Otsikko:<br/>
-            <input type="text" name="otsikko" required /><br/><br/>
+            <input type="text" name="otsikko" size="60" required /><br/><br/>
 
             Ingressi:<br/>
-            <input type="text" name="ingressi" required />
-            <br/><br/>
+            <textarea rows="6" cols="80" name="ingressi" required ></textarea><br/><br/>
 
             Leipäteksti:<br/>
-            <textarea rows="8" cols="80" name="leipateksti" required ></textarea><br/><br/>
+            <textarea rows="12" cols="80" name="leipateksti" required ></textarea><br/><br/>
 
             Julkaisuaika:<br/>
             <input type="datetime-local" name="julkaisuaika" required /><br/><br/>
 
-            Kirjoittaja(t):<br/>
-            <input type="text" name="kirjoittajat" required /><br/><br/>
+            Kirjoittaja tai kirjoittajat pilkuilla eroteltuina:<br/>
+            <input type="text" name="kirjoittajat" size="60" required /><br/><br/>
 
-            Kategoria(t):<br/>
-            <input type="text" name="kategoriat" required /><br/><br/>
-            <input type="submit" value="Tallenna uutinen"/>
+            Kategoria tai kategoriat pilkuilla eroteltuina:<br/>
+            <input type="text" name="kategoriat" size="60" required /><br/><br/>
+            <input type="submit" value="Tallenna uutinen" style="width: 180px; font-size: 80%; background-color: lightcyan"/>
         </form><br /><br />
 
 

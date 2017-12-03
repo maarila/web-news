@@ -18,5 +18,5 @@ public class Kirjoittaja extends AbstractPersistable<Long> {
     @ManyToMany(mappedBy = "kirjoittajat")
     private List<Uutinen> uutiset;
 
-    private String name;
+    private String nimi;
 }

@@ -1,8 +1,8 @@
 package wad.controller;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import wad.domain.Kirjoittaja;
 import wad.domain.Kuva;
 import wad.domain.Uutinen;
+import wad.repository.KategoriaRepository;
+import wad.repository.KirjoittajaRepository;
 import wad.repository.KuvaRepository;
 import wad.repository.UutisRepository;
+import wad.service.Muokkaus;
 
 @Controller
 public class UutisController {
@@ -27,7 +31,15 @@ public class UutisController {
     private UutisRepository uutisRepository;
 
     @Autowired
+    private KirjoittajaRepository kirjoittajaRepository;
+
+    @Autowired
+    private KategoriaRepository kategoriaRepository;
+
+    @Autowired
     private KuvaRepository kuvaRepository;
+
+    private final Muokkaus muokkaus = new Muokkaus();
 
     @GetMapping("/")
     public String etusivu(Model model) {
@@ -75,24 +87,35 @@ public class UutisController {
     @PostMapping("/hallinta")
     public String luoUutinen(@RequestParam String otsikko, @RequestParam String ingressi,
             @RequestParam String leipateksti, @RequestParam String julkaisuaika,
-            @RequestParam String kirjoittajat, @RequestParam String kategoriat)
-            throws IOException {
+            @RequestParam String kirjoittajat, @RequestParam String kategoriat) throws IOException {
         Uutinen uutinen = new Uutinen();
-
-//        Kirjoittaja kirjoittaja = new Kirjoittaja();
-//        kirjoittaja.setName(kirjoittajat);
-//        Kategoria kategoria = new Kategoria();
-//        kategoria.setName(kategoriat);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(julkaisuaika, formatter);
-
         uutinen.setOtsikko(otsikko);
         uutinen.setIngressi(ingressi);
         uutinen.setLeipateksti(leipateksti);
-        uutinen.setJulkaisuaika(dateTime);
+        uutinen.setJulkaisuaika(muokkaus.luoOikeanMuotoinenAika(julkaisuaika));
         uutinen.setLuettu(0);
-//        uutinen.getKirjoittajat().add(kirjoittaja);
+
+        String[] kirjoittajaTaulukko = muokkaus.erotaToisistaan(kirjoittajat);
+        List<Kirjoittaja> uutisenKirjoittajat = new ArrayList<>();
+
+        for (int i = 0; i < kirjoittajaTaulukko.length; i++) {
+            Kirjoittaja kirjoittaja = kirjoittajaRepository.findByNimi(kirjoittajaTaulukko[i]);
+            if (kirjoittaja == null) {
+                Kirjoittaja uusi = new Kirjoittaja();
+                uusi.setNimi(kirjoittajaTaulukko[i]);
+                uusi.setUutiset(new ArrayList<>());
+                kirjoittajaRepository.save(uusi);
+                kirjoittaja = kirjoittajaRepository.findByNimi(kirjoittajaTaulukko[i]);
+            }
+            uutisenKirjoittajat.add(kirjoittaja);
+            kirjoittaja.getUutiset().add(uutinen);
+            kirjoittajaRepository.save(kirjoittaja);
+        }
+        uutinen.setKirjoittajat(uutisenKirjoittajat);
+
 //        uutinen.getKategoriat().add(kategoria);
+//        Kategoria kategoria = new Kategoria();
+//        kategoria.setName(kategoriat);
         uutisRepository.save(uutinen);
         return "redirect:/hallinta";
     }

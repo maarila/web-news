@@ -6,8 +6,13 @@
     </head>
     <body>
         <style>
-            h1 {
-                margin:0;
+            h1, h4 {
+                margin: 0;
+                padding-bottom: 6px;
+                font-family: verdana;
+            }
+            span {
+                font-size: 90%;
             }
             a:link {
                 color: black;
@@ -40,9 +45,14 @@
 
         <h1 th:text="${uutinen.otsikko}"></h1>
         <h4 th:text="${uutinen.ingressi}"></h4>
+        <span>Julkaistu:</span>
         <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
-        <img th:src="@{/uutinen/{id}(id=${uutinen.kuva.id})}" alt="Uutiskuva" width="500" height="300"/><br />
+        <img th:src="@{/uutinen/{id}(id=${uutinen.kuva.id})}" alt="Uutiskuva" width="500" height="300"/><br /><br />
         <span th:text="${uutinen.leipateksti}"></span><br />
+        Kirjoittajat:
+        <div th:each="kirjoittaja : ${uutinen.kirjoittajat}">
+            <span th:text="${kirjoittaja.nimi}"></span>
+        </div>
 
     </body>
 
