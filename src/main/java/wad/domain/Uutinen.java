@@ -26,5 +26,7 @@ public class Uutinen extends AbstractPersistable<Long> {
     private List<Kirjoittaja> kirjoittajat;
     @ManyToMany
     private List<Kategoria> kategoriat;
+    
+    private Integer luettu;
 
 }

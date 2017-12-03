@@ -51,6 +51,8 @@ public class UutisController {
     @GetMapping("/uutinen/{id}")
     public String uutinen(@PathVariable Long id, Model model) {
         Uutinen uutinen = this.uutisRepository.getOne(id);
+        uutinen.setLuettu(uutinen.getLuettu() + 1);
+        this.uutisRepository.save(uutinen);
         model.addAttribute("uutinen", uutinen);
         return "uutinen";
     }
@@ -84,6 +86,7 @@ public class UutisController {
         uutinen.setIngressi(ingressi);
         uutinen.setLeipateksti(leipateksti);
         uutinen.setJulkaisuaika(dateTime);
+        uutinen.setLuettu(0);
 //        uutinen.getKirjoittajat().add(kirjoittaja);
 //        uutinen.getKategoriat().add(kategoria);
         uutisRepository.save(uutinen);
