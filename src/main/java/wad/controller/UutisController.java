@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -134,6 +135,7 @@ public class UutisController {
 
     @GetMapping(path = "/uutinen/{id}/kuva", produces = "image/jpg")
     @ResponseBody
+    @Transactional
     public byte[] get(@PathVariable Long id) {
         Long kuvanId = this.uutisRepository.getOne(id).getKuva().getId();
         return this.kuvaRepository.getOne(kuvanId).getKuva();
