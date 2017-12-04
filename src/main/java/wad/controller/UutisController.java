@@ -68,6 +68,7 @@ public class UutisController {
     }
 
     @GetMapping("/uutinen/{id}")
+    @Transactional
     public String uutinen(@PathVariable Long id, Model model) {
         Uutinen uutinen = this.uutisRepository.getOne(id);
         uutinen.setLuettu(uutinen.getLuettu() + 1);
