@@ -132,7 +132,7 @@ public class UutisController {
         return "redirect:/hallinta";
     }
 
-    @GetMapping(path = "/uutinen/{id}", produces = "image/jpg")
+    @GetMapping(path = "/uutinen/{id}/kuva", produces = "image/jpg")
     @ResponseBody
     public byte[] get(@PathVariable Long id) {
         return this.kuvaRepository.findById(id).get().getKuva();
