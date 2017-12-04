@@ -50,7 +50,7 @@
         <h4 th:text="${uutinen.ingressi}"></h4>
         <span>Julkaistu:</span>
         <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
-        <img th:src="@{/uutinen/{id}/kuva(id=${uutinen.kuva.id})}" alt="Uutiskuva" width="500" height="300"/><br /><br />
+        <img th:src="@{/uutinen/{id}/kuva(id=${uutinen.id})}" alt="Uutiskuva" width="500" height="300"/><br /><br />
         <div th:text="${uutinen.leipateksti}"></div><br /><br />
         Kirjoittajat:
         <div th:each="kirjoittaja : ${uutinen.kirjoittajat}">

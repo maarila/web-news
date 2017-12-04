@@ -135,7 +135,8 @@ public class UutisController {
     @GetMapping(path = "/uutinen/{id}/kuva", produces = "image/jpg")
     @ResponseBody
     public byte[] get(@PathVariable Long id) {
-        return this.kuvaRepository.findById(id).get().getKuva();
+        Long kuvanId = this.uutisRepository.getOne(id).getKuva().getId();
+        return this.kuvaRepository.getOne(kuvanId).getKuva();
     }
 
     public List<Kirjoittaja> lisaaUutinenKirjoittajille(Uutinen uutinen, String kirjoittajat) {
