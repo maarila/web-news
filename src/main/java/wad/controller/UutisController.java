@@ -102,7 +102,7 @@ public class UutisController {
 
     @PostMapping("/kirjautuminen")
     public String kirjaudu(@RequestParam String kayttajatunnus, @RequestParam String salasana, HttpSession session) {
-        if (kayttajatunnus.equals("admin") && salasana.equals("adminlol")) {
+        if (kayttajatunnus.equals("admin") && salasana.equals("password")) {
             session.setAttribute("admin", "onSeAdmin");
             return "hallintapaneeli";
         }
