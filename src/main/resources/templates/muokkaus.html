@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Uutisten muokkaus</title>
+    </head>
+    <body>
+
+        <h1>Poista uutisia</h1>
+
+        <div th:each="uutinen : ${uutiset}">
+
+            <form th:action="@{/uutinen/{id}/poista(id=${uutinen.id})}" th:method="DELETE">
+                <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">
+                    <span th:text="${uutinen.otsikko}">Uutinen</span></a>
+                <input type="submit" value="Poista" th:id="${'remove-' + uutinen.id}"/>
+            </form>
+        </div>
+
+        <br /><br /><a href="../hallinta">Palaa hallintasivulle</a>
+        <br /><br /><a href="../">Palaa etusivulle</a>
+
+    </body>
+
+</html>

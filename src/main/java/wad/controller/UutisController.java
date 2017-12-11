@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,9 +87,18 @@ public class UutisController {
     }
 
     @GetMapping("/hallinta")
-    public String hallintapaneeli(Model model, HttpSession session) {
+    public String hallintapaneeli(HttpSession session) {
         if (session.getAttribute("admin") != null && session.getAttribute("admin").equals("onSeAdmin")) {
             return "hallintapaneeli";
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping("/muokkaus")
+    public String muokkaus(Model model, HttpSession session) {
+        if (session.getAttribute("admin") != null && session.getAttribute("admin").equals("onSeAdmin")) {
+            model.addAttribute("uutiset", uutisRepository.findAll());
+            return "muokkaus";
         }
         return "redirect:/";
     }
@@ -96,11 +106,11 @@ public class UutisController {
     @GetMapping("/kirjautuminen")
     public String kirjautuminen(HttpSession session) {
         if (session.getAttribute("admin") != null && session.getAttribute("admin").equals("onSeAdmin")) {
-                return "hallintapaneeli";
-            }
+            return "hallintapaneeli";
+        }
         return "kirjautuminen";
     }
-    
+
     @GetMapping("/kategoriat/{id}")
     public String kategoria(@PathVariable Long id, Model model) {
         Kategoria kategoria = kategoriaRepository.findById(id).get();
@@ -108,6 +118,23 @@ public class UutisController {
         model.addAttribute("kategoriat", kategoriaRepository.findByValikossaTrue());
         model.addAttribute("listaus", "Kategoria: " + kategoria.getNimi().toLowerCase());
         return "uutislista";
+    }
+    
+    @DeleteMapping("/uutinen/{id}/poista")
+    @Transactional
+    public String poistaUutinen(@PathVariable Long id) {
+        Uutinen uutinen = uutisRepository.getOne(id);
+        
+        for (Kategoria kategoria : uutinen.getKategoriat()) {
+            kategoria.getUutiset().remove(uutinen);
+        }
+        
+        for (Kirjoittaja kirjoittaja : uutinen.getKirjoittajat()) {
+            kirjoittaja.getUutiset().remove(uutinen);
+        }
+               
+        uutisRepository.delete(uutinen);
+        return "redirect:/muokkaus";
     }
 
     @PostMapping("/kategoriat")
