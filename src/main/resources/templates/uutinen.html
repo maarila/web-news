@@ -46,6 +46,16 @@
         </header>
         <hr />
 
+        <form method="POST" th:action="@{/kategoriat}">
+            <select name="id">
+                <option th:each="kategoria: ${kategoriat}" th:value="${kategoria.id}">
+                    <span th:text="${kategoria.nimi}">Kategorian nimi</span>
+                </option>
+            </select>
+            <input type="submit" value="Hae kategorian uutiset"/>
+        </form>
+        <hr />
+
         <h1 th:text="${uutinen.otsikko}"></h1>
         <h4 th:text="${uutinen.ingressi}"></h4>
         <span>Julkaistu:</span>
@@ -65,7 +75,7 @@
                 <span th:text="${#temporals.format(uutinen.julkaisuaika, 'dd.MM.yyyy HH:mm')}"></span><br /><br />
             </a>
         </div><hr />
-        
+
         <h2>Luetuimmat:</h2><br />
         <div th:each="uutinen : ${luetuimmat}">
             <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">

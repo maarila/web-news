@@ -48,7 +48,7 @@ public class UutisController {
     public String etusivu(Model model) {
         Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "julkaisuaika");
         model.addAttribute("uutiset", uutisRepository.findAll(pageable));
-        model.addAttribute("kategoriat", kategoriaRepository.findAll());
+        model.addAttribute("kategoriat", kategoriaRepository.findByValikossaTrue());
         return "index";
     }
 
@@ -56,6 +56,7 @@ public class UutisController {
     public String uusimmatLista(Model model) {
         Sort sort = new Sort(Sort.Direction.DESC, "julkaisuaika");
         model.addAttribute("uutiset", uutisRepository.findAll(sort));
+        model.addAttribute("kategoriat", kategoriaRepository.findByValikossaTrue());
         model.addAttribute("listaus", "Uusimmat uutiset");
         return "uutislista";
     }
@@ -64,6 +65,7 @@ public class UutisController {
     public String luetuimmatLista(Model model) {
         Sort sort = new Sort(Sort.Direction.DESC, "luettu");
         model.addAttribute("uutiset", uutisRepository.findAll(sort));
+        model.addAttribute("kategoriat", kategoriaRepository.findByValikossaTrue());
         model.addAttribute("listaus", "Luetuimmat uutiset");
         return "uutislista";
     }
@@ -75,6 +77,7 @@ public class UutisController {
         uutinen.setLuettu(uutinen.getLuettu() + 1);
         this.uutisRepository.save(uutinen);
         model.addAttribute("uutinen", uutinen);
+        model.addAttribute("kategoriat", kategoriaRepository.findByValikossaTrue());
         Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "julkaisuaika");
         model.addAttribute("uusimmat", uutisRepository.findAll(pageable));
         pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "luettu");
@@ -84,10 +87,8 @@ public class UutisController {
 
     @GetMapping("/hallinta")
     public String hallintapaneeli(Model model, HttpSession session) {
-        if (!(session.getAttribute("admin") == null)) {
-            if (session.getAttribute("admin").equals("onSeAdmin")) {
-                return "hallintapaneeli";
-            }
+        if ((session.getAttribute("admin") != null && session.getAttribute("admin").equals("onSeAdmin"))) {
+            return "hallintapaneeli";
         }
         return "redirect:/";
     }
@@ -102,13 +103,18 @@ public class UutisController {
         return "kirjautuminen";
     }
     
-        
-    @PostMapping("/kategoriat")
-    public String haeKategoriat(@RequestParam Long id, Model model) {
+    @GetMapping("/kategoriat/{id}")
+    public String kategoria(@PathVariable Long id, Model model) {
         Kategoria kategoria = kategoriaRepository.findById(id).get();
         model.addAttribute("uutiset", uutisRepository.findByKategoriat_Nimi(kategoria.getNimi()));
-        model.addAttribute("listaus", "Kategoriat");
+        model.addAttribute("kategoriat", kategoriaRepository.findByValikossaTrue());
+        model.addAttribute("listaus", "Kategoria: " + kategoria.getNimi().toLowerCase());
         return "uutislista";
+    }
+
+    @PostMapping("/kategoriat")
+    public String haeKategoriat(@RequestParam Long id) {
+        return "redirect:/kategoriat/" + id;
     }
 
     @PostMapping("/kirjautuminen")
@@ -135,15 +141,16 @@ public class UutisController {
         uutinen.setLuettu(0);
         uutinen.setKirjoittajat(lisaaUutinenKirjoittajille(uutinen, kirjoittajat));
         uutinen.setKategoriat(lisaaUutinenKategorioihin(uutinen, kategoriat));
+
         if (checkbox.length == 2) {
-            System.out.println("moikka");
+            lisaaKategoriatValikkoon(kategoriat);
         }
-        
+
         Kuva kuva = muokkaus.luoKuva(tiedosto);
         kuvaRepository.save(kuva);
-        
+
         uutinen.setKuva(kuva);
-        
+
         uutisRepository.save(uutinen);
         return "redirect:/hallinta";
     }
@@ -194,5 +201,14 @@ public class UutisController {
             kategoriaRepository.save(kategoria);
         }
         return uutisenKategoriat;
+    }
+
+    private void lisaaKategoriatValikkoon(String kategoriat) {
+        String[] kategoriaTaulukko = muokkaus.erotaToisistaan(kategoriat);
+        for (int i = 0; i < kategoriaTaulukko.length; i++) {
+            Kategoria kategoria = kategoriaRepository.findByNimi(kategoriaTaulukko[i]);
+            kategoria.setValikossa(true);
+            kategoriaRepository.save(kategoria);
+        }
     }
 }

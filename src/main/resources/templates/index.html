@@ -43,7 +43,7 @@
         <form method="POST" th:action="@{/kategoriat}">
             <select name="id">
                 <option th:each="kategoria: ${kategoriat}" th:value="${kategoria.id}">
-                    <span th:text="${kategoria.nimi}"></span>
+                    <span th:text="${kategoria.nimi}">Kategorian nimi</span>
                 </option>
             </select>
             <input type="submit" value="Hae kategorian uutiset"/>

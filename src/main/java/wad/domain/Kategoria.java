@@ -19,4 +19,5 @@ public class Kategoria extends AbstractPersistable<Long> {
     private List<Uutinen> uutiset;
 
     private String nimi;
+    private boolean valikossa;
 }
