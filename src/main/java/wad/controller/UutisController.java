@@ -87,7 +87,7 @@ public class UutisController {
 
     @GetMapping("/hallinta")
     public String hallintapaneeli(Model model, HttpSession session) {
-        if ((session.getAttribute("admin") != null && session.getAttribute("admin").equals("onSeAdmin"))) {
+        if (session.getAttribute("admin") != null && session.getAttribute("admin").equals("onSeAdmin")) {
             return "hallintapaneeli";
         }
         return "redirect:/";
@@ -95,11 +95,9 @@ public class UutisController {
 
     @GetMapping("/kirjautuminen")
     public String kirjautuminen(HttpSession session) {
-        if (!(session.getAttribute("admin") == null)) {
-            if (session.getAttribute("admin").equals("onSeAdmin")) {
+        if (session.getAttribute("admin") != null && session.getAttribute("admin").equals("onSeAdmin")) {
                 return "hallintapaneeli";
             }
-        }
         return "kirjautuminen";
     }
     

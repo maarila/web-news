@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import wad.repository.UutisRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -20,9 +19,8 @@ public class UutisControllerTest {
     @Autowired
     private WebApplicationContext webAppContext;
 
-    @Autowired
-    private UutisRepository uutisRepository;
-
+//    @Autowired
+//    private UutisRepository uutisRepository;
     private MockMvc mockMvc;
 
     @Before
