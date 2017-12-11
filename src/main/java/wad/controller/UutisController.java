@@ -155,7 +155,7 @@ public class UutisController {
         return "redirect:/hallinta";
     }
 
-    @GetMapping(path = "/uutinen/{id}/kuva", produces = "image/jpg")
+    @GetMapping(path = "/uutinen/{id}/kuva", produces = "image/png")
     @ResponseBody
     @Transactional
     public byte[] get(@PathVariable Long id) {

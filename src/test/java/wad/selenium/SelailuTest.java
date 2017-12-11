@@ -33,16 +33,22 @@ public class SelailuTest extends FluentTest {
 
         assertTrue(pageSource().contains("Luetuimmat uutiset"));
 
-        find(By.linkText("KIRJAUDU/HALLINTAPANEELI")).click();
+        find(By.linkText("KIRJAUDU")).click();
 
         assertFalse(pageSource().contains("Luetuimmat uutiset"));
+        assertTrue(pageSource().contains("Kirjaudu uutisten hallintaan"));
+
+        // paluu etusivulle
+        find("a").first().click();
+
+        assertFalse(pageSource().contains("Kirjaudu uutisten hallintaan"));
     }
 
     @Test
     public void voiSiirtyaHallintapaneeliinOikeillaTunnuksilla() {
         goTo("http://localhost:" + port);
 
-        find(By.linkText("KIRJAUDU/HALLINTAPANEELI")).click();
+        find(By.linkText("KIRJAUDU")).click();
 
         assertTrue(pageSource().contains("Kirjaudu uutisten hallintaan"));
 
@@ -57,5 +63,11 @@ public class SelailuTest extends FluentTest {
         find("form").first().submit();
 
         assertTrue(pageSource().contains("Luo uusi uutinen"));
+
+        // paluu etusivulle
+        find("a").first().click();
+
+        assertFalse(pageSource().contains("Luo uusi uutinen"));
+
     }
 }
