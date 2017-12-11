@@ -112,6 +112,7 @@ public class UutisController {
     }
 
     @GetMapping("/kategoriat/{id}")
+    @Transactional
     public String kategoria(@PathVariable Long id, Model model) {
         Kategoria kategoria = kategoriaRepository.findById(id).get();
         model.addAttribute("uutiset", uutisRepository.findByKategoriat_Nimi(kategoria.getNimi()));
