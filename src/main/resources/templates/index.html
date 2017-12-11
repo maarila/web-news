@@ -39,7 +39,16 @@
             <p>linkki-header</p>
         </header>
 
-        <hr></hr>
+        <hr />
+        <form method="POST" th:action="@{/kategoriat}">
+            <select name="id">
+                <option th:each="kategoria: ${kategoriat}" th:value="${kategoria.id}">
+                    <span th:text="${kategoria.nimi}"></span>
+                </option>
+            </select>
+            <input type="submit" value="Hae kategorian uutiset"/>
+        </form>
+        <hr />
 
         <div th:each="uutinen : ${uutiset}">
             <a th:href="@{/uutinen/{id}(id=${uutinen.id})}">

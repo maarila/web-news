@@ -48,6 +48,7 @@ public class UutisController {
     public String etusivu(Model model) {
         Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "julkaisuaika");
         model.addAttribute("uutiset", uutisRepository.findAll(pageable));
+        model.addAttribute("kategoriat", kategoriaRepository.findAll());
         return "index";
     }
 
@@ -100,10 +101,19 @@ public class UutisController {
         }
         return "kirjautuminen";
     }
+    
+        
+    @PostMapping("/kategoriat")
+    public String haeKategoriat(@RequestParam Long id, Model model) {
+        Kategoria kategoria = kategoriaRepository.findById(id).get();
+        model.addAttribute("uutiset", uutisRepository.findByKategoriat_Nimi(kategoria.getNimi()));
+        model.addAttribute("listaus", "Kategoriat");
+        return "uutislista";
+    }
 
     @PostMapping("/kirjautuminen")
     public String kirjaudu(@RequestParam String kayttajatunnus, @RequestParam String salasana, HttpSession session) {
-        if (kayttajatunnus.equals("admin") && salasana.equals("password")) {
+        if (("admin").equals(kayttajatunnus) && ("password").equals(salasana)) {
             session.setAttribute("admin", "onSeAdmin");
             return "hallintapaneeli";
         }
@@ -114,6 +124,7 @@ public class UutisController {
     public String luoUutinen(@RequestParam String otsikko, @RequestParam String ingressi,
             @RequestParam String leipateksti, @RequestParam String julkaisuaika,
             @RequestParam String kirjoittajat, @RequestParam String kategoriat,
+            @RequestParam("lisataanKategoriat") String[] checkbox,
             @RequestParam("kuva") MultipartFile tiedosto) throws IOException {
 
         Uutinen uutinen = new Uutinen();
@@ -124,6 +135,9 @@ public class UutisController {
         uutinen.setLuettu(0);
         uutinen.setKirjoittajat(lisaaUutinenKirjoittajille(uutinen, kirjoittajat));
         uutinen.setKategoriat(lisaaUutinenKategorioihin(uutinen, kategoriat));
+        if (checkbox.length == 2) {
+            System.out.println("moikka");
+        }
         
         Kuva kuva = muokkaus.luoKuva(tiedosto);
         kuvaRepository.save(kuva);
